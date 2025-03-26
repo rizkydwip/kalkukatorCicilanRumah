@@ -11,8 +11,18 @@ struct ResultsPage: View {
     
     @EnvironmentObject var viewModel : ViewModel
     
+    func formatDecimalWithSeparator(_ value: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "id_ID")
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        return formatter.string(from: NSNumber(value: value)) ?? "\(value)"
+    }
+    
     var body: some View {
         // coba
+        
         
         let downPayment = Double( ((viewModel.hargaProperty ?? 0.0)  * Float(viewModel.downPayment ?? 0.0 ) * 0.01))
         
@@ -115,7 +125,8 @@ struct ResultsPage: View {
                             .font(.title3.bold())
                             .cornerRadius(16)
                             .frame(width: .infinity)
-                        Text("\(totalPinjamanPokok)")
+//                        Text("\(totalPinjamanPokok)")
+                        Text(formatDecimalWithSeparator(Double(totalPinjamanPokok)))
                             .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
@@ -132,7 +143,7 @@ struct ResultsPage: View {
                             .font(.title3.bold())
                             .cornerRadius(16)
                             .frame(width: .infinity)
-                        Text(String(format: "%.2f", angsuranPokok))
+                        Text(formatDecimalWithSeparator(Double(angsuranPokok)))
                             .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
@@ -152,7 +163,7 @@ struct ResultsPage: View {
                             .cornerRadius(16)
                             .frame(width: .infinity)
                         //                        Text("\(bungaFixRate)")
-                        Text(String(format: "%.2f", bungaFixRate))
+                        Text(formatDecimalWithSeparator(Double(bungaFixRate)))
                             .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
@@ -172,7 +183,7 @@ struct ResultsPage: View {
                             .cornerRadius(16)
                             .frame(width: .infinity)
                         //                        Text("\(angsuranFixRatePerBulan)")
-                        Text(String(format: "%.2f", angsuranFixRatePerBulan))
+                        Text(formatDecimalWithSeparator(Double(angsuranFixRatePerBulan)))
                             .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
@@ -192,7 +203,7 @@ struct ResultsPage: View {
                             .cornerRadius(16)
                             .frame(width: .infinity)
                         //                        Text("\(angsuranBungaFloatingRate)")
-                        Text(String(format: "%.2f", angsuranBungaFloatingRate))
+                        Text(formatDecimalWithSeparator(Double(angsuranBungaFloatingRate)))
                             .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
@@ -212,7 +223,7 @@ struct ResultsPage: View {
                             .cornerRadius(16)
                             .frame(width: .infinity)
                         //                        Text("\(totalBungaPeriodeFixRate)")
-                        Text(String(format: "%.2f", totalBungaPeriodeFixRate))
+                        Text(formatDecimalWithSeparator(Double(totalBungaPeriodeFixRate)))
                             .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
@@ -232,7 +243,7 @@ struct ResultsPage: View {
                             .cornerRadius(16)
                             .frame(width: .infinity)
                         //                        Text("\(totalBungaFloatingRate)")
-                        Text(String(format: "%.2f", totalBungaFloatingRate))
+                        Text(formatDecimalWithSeparator(Double(totalBungaFloatingRate)))
                             .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
@@ -247,12 +258,12 @@ struct ResultsPage: View {
                     
                     
                     VStack(alignment: .leading){
-                        Text("Total KPR hingga lunas ")
+                        Text("Total cicilan hingga lunas ")
                             .font(.title3.bold())
                             .cornerRadius(16)
                             .frame(width: .infinity)
                         //                        Text("\(pembayaranKprHinggaLunas)")
-                        Text(String(format: "%.2f", pembayaranKprHinggaLunas))
+                        Text(formatDecimalWithSeparator(Double(pembayaranKprHinggaLunas)))
                             .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
