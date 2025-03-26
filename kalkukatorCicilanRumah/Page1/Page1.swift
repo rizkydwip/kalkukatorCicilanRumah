@@ -85,7 +85,7 @@ struct Page1: View {
         NavigationView{
             ScrollView{
                 
-                VStack(alignment: .leading, spacing: 50){
+                VStack(alignment: .leading, spacing: 25){
                     VStack(alignment: .leading, spacing: 10){
                         Text(" Step 1 of 3")
                             .frame(maxWidth: .infinity, alignment: .leading )
@@ -128,10 +128,14 @@ struct Page1: View {
                          
                             }
                         }
+                        
+                        Text("Data Pinjaman")
+                            .font(.largeTitle.bold())
+                            .padding(.leading)
                             
                         
                         Spacer()
-                        Text("1.  Berapa harga properti yang kamu inginkan ? ")
+                        Text("1.  Berapa harga properti yang kamu inginkan? ")
                             .font(.headline)
                             .padding()
                             .cornerRadius(16)
@@ -148,12 +152,12 @@ struct Page1: View {
                                 .keyboardType(.numberPad)
                                 .cornerRadius(16)
                                 .frame(maxWidth: .infinity,alignment: .trailing)
-                        }
+                        }      .padding(.leading)
                     }
                     
                     VStack(alignment: .leading, spacing: 10){
                         HStack{
-                            Text("2.  Berapa persen Down payment yang ingin kamu setor ? ")
+                            Text("2.  Berapa persen Down payment yang ingin kamu setor? ")
                                 .font(.headline)
                                 .padding()
                                 .cornerRadius(16)
@@ -163,10 +167,11 @@ struct Page1: View {
                                     showDetail.toggle()
                                 }
                             } label: {
-                                Label("Graph", systemImage: "chevron.right.circle")
+                                Label("Graph", systemImage: "questionmark.circle")
                                     .labelStyle(.iconOnly)
                                     .imageScale(.large)
-                                    .rotationEffect(.degrees(showDetail ? 90 : 0))
+//                                    .rotationEffect(.degrees(showDetail ? 90 : 0))
+                                    .foregroundColor(showDetail ?  Color("blue") : Color.primary) // atau pakai .foregroundColor
                                     .scaleEffect(showDetail ? 1 : 1)
                                     .padding()
                             }
@@ -175,15 +180,20 @@ struct Page1: View {
                             Text("Down Payment artinya adalah uang muka. Ini adalah pembayaran awal yang dibayarkan di muka sebelum cicilan dilakukan.")
                                 .transition(.moveAndFade)
                                 .font(.caption.italic())
+                                .padding(.leading)
                         }
-                        TextField("0.000", value: $viewModel.downPayment, formatter: NumberFormatter())
-                            .padding()
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 15, style: .continuous)
-                                    .stroke(Color("blueAI"), lineWidth: 4)
-                            }
-                            .keyboardType(.numberPad)
-                            .cornerRadius(16)
+                        
+                        HStack{
+                            TextField("0.000", value: $viewModel.downPayment, formatter: NumberFormatter())
+                                .padding()
+                            
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 15, style: .continuous)
+                                        .stroke(Color("blueAI"), lineWidth: 4)
+                                }
+                                .keyboardType(.numberPad)
+                                .cornerRadius(16)
+                        }      .padding(.leading)
                     }
                     
                     
@@ -196,7 +206,7 @@ struct Page1: View {
                                 .padding()
                                 .cornerRadius(16)
                                 .frame(width: .infinity, height: 80)
-                            Text("\(totalPinjamanPokok(hargaProperty: viewModel.hargaProperty ?? 0.0, downPayment: viewModel.downPayment ?? 0.0))")
+                            Text("Rp \(totalPinjamanPokok(hargaProperty: viewModel.hargaProperty ?? 0.0, downPayment: viewModel.downPayment ?? 0.0))")
                                 .padding()
                                 .font(.largeTitle.bold())
                                 .keyboardType(.numberPad)

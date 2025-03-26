@@ -12,7 +12,7 @@ struct ResultsPage: View {
     @EnvironmentObject var viewModel : ViewModel
     
     var body: some View {
-        
+        // coba
         
         let downPayment = Double( ((viewModel.hargaProperty ?? 0.0)  * Float(viewModel.downPayment ?? 0.0 ) * 0.01))
         
@@ -56,7 +56,7 @@ struct ResultsPage: View {
                                 .frame(width:180, height: 5)
                             
                         }
-                       
+                        
                         HStack{
                             Image(
                                 systemName:"circle.fill")
@@ -64,7 +64,7 @@ struct ResultsPage: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.trailing, 90)
                             
-                        
+                            
                             
                             Image(
                                 systemName:"circle.fill")
@@ -76,9 +76,9 @@ struct ResultsPage: View {
                                 systemName:"circle.fill")
                             .foregroundStyle(Color("blue"))
                             .frame(maxWidth: .infinity, alignment: .trailing)
-   
                             
-                     
+                            
+                            
                         }
                         HStack{
                             Image(
@@ -86,157 +86,181 @@ struct ResultsPage: View {
                             .foregroundStyle(Color(.white))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.trailing, 90)
-                         
+                            
                             
                             Image(
                                 systemName:"checkmark.circle")
                             .foregroundStyle(Color(.white))
                             .frame(maxWidth: 19, alignment: .leading)
                             .padding(.trailing, 1)
-                         
+                            
                             
                             Image(
                                 systemName:"checkmark.circle")
                             .foregroundStyle(Color(.white))
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             
-                       
+                            
                         }
                     }
                     
                     Text("Results")
                         .font(.largeTitle.bold())
+                        .padding(.leading)
+                    
+                    Spacer()
                     
                     VStack(alignment: .leading){
                         Text("total pinjaman pokok  ")
                             .font(.title3.bold())
-                            .padding()
                             .cornerRadius(16)
                             .frame(width: .infinity)
                         Text("\(totalPinjamanPokok)")
-                            .frame(maxWidth:.infinity)
+                            .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
                                 RoundedRectangle(cornerRadius: 15, style: .continuous)
                                     .stroke(Color("blueAI"), lineWidth: 2)
                             }
                             .keyboardType(.numberPad)
-                    }
+                    }.padding(.leading)
+                    
+                    Spacer()
                     
                     VStack(alignment: .leading){
                         Text("Angsuran pokok  ")
                             .font(.title3.bold())
-                            .padding()
                             .cornerRadius(16)
                             .frame(width: .infinity)
-                        Text("\(angsuranPokok)")
-                            .frame(maxWidth:.infinity)
+                        Text(String(format: "%.2f", angsuranPokok))
+                            .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
                                 RoundedRectangle(cornerRadius: 15, style: .continuous)
                                     .stroke(Color("blueAI"), lineWidth: 2)
                             }
                             .keyboardType(.numberPad)
-                    }
+                    }.padding(.leading)
+                    
+                    
+                    Spacer()
+                    
                     
                     VStack(alignment: .leading){
                         Text("bunga fixrate ")
                             .font(.title3.bold())
-                            .padding()
                             .cornerRadius(16)
                             .frame(width: .infinity)
-                        Text("\(bungaFixRate)")
-                            .frame(maxWidth:.infinity)
+                        //                        Text("\(bungaFixRate)")
+                        Text(String(format: "%.2f", bungaFixRate))
+                            .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
                                 RoundedRectangle(cornerRadius: 15, style: .continuous)
                                     .stroke(Color("blueAI"), lineWidth: 2)
                             }
                             .keyboardType(.numberPad)
-                    }
+                    }.padding(.leading)
+                    
+                    
+                    Spacer()
                     
                     
                     VStack(alignment: .leading){
                         Text("Angsuran pokok + bunga fixrate ")
                             .font(.title3.bold())
-                            .padding()
                             .cornerRadius(16)
                             .frame(width: .infinity)
-                        Text("\(angsuranFixRatePerBulan)")
-                            .frame(maxWidth:.infinity)
+                        //                        Text("\(angsuranFixRatePerBulan)")
+                        Text(String(format: "%.2f", angsuranFixRatePerBulan))
+                            .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
                                 RoundedRectangle(cornerRadius: 15, style: .continuous)
                                     .stroke(Color("blueAI"), lineWidth: 2)
                             }
                             .keyboardType(.numberPad)
-                    }
+                    }.padding(.leading)
+                    
+                    
+                    Spacer()
                     
                     
                     VStack(alignment: .leading){
                         Text("Angsuran pokok + bunga floatingrate ")
                             .font(.title3.bold())
-                            .padding()
                             .cornerRadius(16)
                             .frame(width: .infinity)
-                        Text("\(angsuranBungaFloatingRate)")
-                            .frame(maxWidth:.infinity)
+                        //                        Text("\(angsuranBungaFloatingRate)")
+                        Text(String(format: "%.2f", angsuranBungaFloatingRate))
+                            .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
                                 RoundedRectangle(cornerRadius: 15, style: .continuous)
                                     .stroke(Color("blueAI"), lineWidth: 2)
                             }
                             .keyboardType(.numberPad)
-                    }
+                    }.padding(.leading)
+                    
+                    
+                    Spacer()
                     
                     
                     VStack(alignment: .leading){
                         Text(" Total periode fixrate ")
                             .font(.title3.bold())
-                            .padding()
                             .cornerRadius(16)
                             .frame(width: .infinity)
-                        Text("\(totalBungaPeriodeFixRate)")
-                            .frame(maxWidth:.infinity)
+                        //                        Text("\(totalBungaPeriodeFixRate)")
+                        Text(String(format: "%.2f", totalBungaPeriodeFixRate))
+                            .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
                                 RoundedRectangle(cornerRadius: 15, style: .continuous)
                                     .stroke(Color("blueAI"), lineWidth: 2)
                             }
                             .keyboardType(.numberPad)
-                    }
+                    }.padding(.leading)
+                    
+                    
+                    Spacer()
+                    
                     
                     VStack(alignment: .leading){
                         Text("Total periode floatingrate  ")
                             .font(.title3.bold())
-                            .padding()
                             .cornerRadius(16)
                             .frame(width: .infinity)
-                        Text("\(totalBungaFloatingRate)")
-                            .frame(maxWidth:.infinity)
+                        //                        Text("\(totalBungaFloatingRate)")
+                        Text(String(format: "%.2f", totalBungaFloatingRate))
+                            .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
                                 RoundedRectangle(cornerRadius: 15, style: .continuous)
                                     .stroke(Color("blueAI"), lineWidth: 2)
                             }
                             .keyboardType(.numberPad)
-                    }
+                    }.padding(.leading)
+                    
+                    
+                    Spacer()
+                    
                     
                     VStack(alignment: .leading){
                         Text("Total KPR hingga lunas ")
                             .font(.title3.bold())
-                            .padding()
                             .cornerRadius(16)
                             .frame(width: .infinity)
-                        Text("\(pembayaranKprHinggaLunas)")
-                            .frame(maxWidth:.infinity)
+                        //                        Text("\(pembayaranKprHinggaLunas)")
+                        Text(String(format: "%.2f", pembayaranKprHinggaLunas))
+                            .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
                                 RoundedRectangle(cornerRadius: 15, style: .continuous)
                                     .stroke(Color("blueAI"), lineWidth: 2)
                             }
                             .keyboardType(.numberPad)
-                    }
+                    }.padding(.leading)
                     
                     
                     Spacer()
@@ -271,7 +295,7 @@ struct ResultsPage: View {
                     viewModel.progressNumber3 = 0
                     viewModel.progressNumber4 = 0
                 }
-
+                
                 .padding(.horizontal, 10)
             }
         }.navigationBarHidden(true)

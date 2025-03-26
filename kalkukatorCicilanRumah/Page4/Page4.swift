@@ -22,6 +22,8 @@ struct Page4: View {
         let totalPinjamanPokok = Int( Double(viewModel.hargaProperty ?? 0.0) - downPayment )
         
         let monthcalculation = Int((Float(viewModel.inputLamaFixRate ?? 0.0)) * 12 )
+        
+        let rumusLamaFloatingRate = Int(viewModel.lamaCicilan - Float(viewModel.inputLamaFixRate ?? 0.0))
         NavigationStack{
             ScrollView{
                 
@@ -40,10 +42,10 @@ struct Page4: View {
                             ProgressBar(initialProgress: $viewModel.progressNumber2, color: Color("blue"))
                                 .frame(width:180, height: 5)
                             
-    
+                            
                             
                         }
-                       
+                        
                         HStack{
                             Image(
                                 systemName:"circle.fill")
@@ -51,7 +53,7 @@ struct Page4: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.trailing, 90)
                             
-                        
+                            
                             
                             Image(
                                 systemName:"circle.fill")
@@ -63,9 +65,9 @@ struct Page4: View {
                                 systemName:"circle.fill")
                             .foregroundStyle(Color(.gray))
                             .frame(maxWidth: .infinity, alignment: .trailing)
-   
                             
-                     
+                            
+                            
                         }
                         HStack{
                             Image(
@@ -73,26 +75,27 @@ struct Page4: View {
                             .foregroundStyle(Color(.white))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.trailing, 90)
-                         
+                            
                             
                             Image(
                                 systemName:"checkmark.circle")
                             .foregroundStyle(Color(.white))
                             .frame(maxWidth: 19, alignment: .leading)
                             .padding(.trailing, 1)
-                         
+                            
                             
                             Image(
                                 systemName:"circle.fill")
                             .foregroundStyle(Color("blueAI"))
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             
-                       
+                            
                         }
                     }
-
+                    
                     Text("Summary")
                         .font(.largeTitle.bold())
+                        .padding(.leading)
                     
                     
                     VStack(alignment: .leading){
@@ -111,6 +114,8 @@ struct Page4: View {
                             .keyboardType(.numberPad)
                             .cornerRadius(16)
                             .frame(maxWidth: .infinity,alignment: .trailing)
+                            .padding(.leading)
+                        
                         
                         
                     }
@@ -135,7 +140,7 @@ struct Page4: View {
                                 .font(.headline)
                             Text("%")
                                 .font(.headline)
-                        }
+                        }.padding(.leading)
                     }
                     
                     
@@ -147,13 +152,14 @@ struct Page4: View {
                             .frame(width: .infinity)
                         
                         Text("\(totalPinjamanPokok)")
-                            .frame(maxWidth:.infinity)
+                            .frame(maxWidth:.infinity, alignment: .leading)
                             .padding()
                             .overlay {
                                 RoundedRectangle(cornerRadius: 15, style: .continuous)
                                     .stroke(Color("blueAI"), lineWidth: 2)
                             }
                             .keyboardType(.numberPad)
+                            .padding(.leading)
                     }
                     
                     VStack(alignment: .leading){
@@ -162,6 +168,7 @@ struct Page4: View {
                             .padding()
                             .cornerRadius(16)
                             .frame(width: .infinity)
+                        
                         TextField("0.000", value: $viewModel.lamaCicilan, formatter: NumberFormatter())
                             .padding()
                             .overlay {
@@ -170,6 +177,7 @@ struct Page4: View {
                             }
                             .keyboardType(.numberPad)
                             .cornerRadius(16)
+                            .padding(.leading)
                         if viewModel.lamaCicilan > 30 {
                             Text("Melebihi batas lamanya cicilan")
                         }
@@ -190,6 +198,7 @@ struct Page4: View {
                                 }
                                 .keyboardType(.decimalPad)
                                 .font(.headline)
+                                .padding(.leading)
                             Text("%")
                                 .font(.headline)
                         }
@@ -207,13 +216,12 @@ struct Page4: View {
                                 .padding()
                                 .overlay {
                                     RoundedRectangle(cornerRadius: 15, style: .continuous)
-                                        .stroke(Color("blueAI"), lineWidth: 1)
+                                        .stroke(Color("blueAI"), lineWidth: 2)
                                 }
                                 .keyboardType(.decimalPad)
                             Text("Tahun / \(monthcalculation) Bulan")
                                 .font(.headline)
-                            
-                        }
+                        }.padding(.leading)
                     }
                     if viewModel.inputLamaFixRate ?? 0.0 > 5 {
                         Text("Melebihi batas lama fix rate")
@@ -234,10 +242,30 @@ struct Page4: View {
                                         .stroke(Color("blueAI"), lineWidth: 2)
                                 }
                             Text("%")
-                        }
+                        }.padding(.leading)
+                    }
+                    
+                    VStack(alignment: .leading){
+                        Text("8. Lama bunga floatingrate")
+                            .font(.title3.bold())
+                            .padding()
+                            .cornerRadius(16)
+                            .frame(width: .infinity)
+                        HStack(){
+                            Text("\(rumusLamaFloatingRate)")
+                                .keyboardType(.decimalPad)
+                                .frame(maxWidth:.infinity, alignment: .leading)
+                                .font(.headline)
+                                .padding()
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 15, style: .continuous)
+                                        .stroke(Color("blueAI"), lineWidth: 2)
+                                }
+                        }.padding(.leading)
                     }
                     
                     
+                    Spacer()
                     Spacer()
                     HStack{
                         NavigationLink(destination: Page2()){
@@ -261,7 +289,7 @@ struct Page4: View {
                             
                         }
                     }
-
+                    
                     Spacer()
                 }
                 .onAppear{
@@ -273,7 +301,7 @@ struct Page4: View {
                 .onDisappear(){
                     viewModel.progressNumber2 = 0
                 }
-
+                
                 .padding(.horizontal, 10)
             }
         } .navigationBarHidden(true)
