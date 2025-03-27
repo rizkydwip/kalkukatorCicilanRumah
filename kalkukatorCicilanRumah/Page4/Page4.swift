@@ -16,6 +16,30 @@ struct Page4: View {
     
     var body: some View {
         
+        var isFixRateError: Bool {
+            if (viewModel.inputFixRate ?? 0) > 100  {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        var isLamaFixRateError: Bool {
+            if (viewModel.inputLamaFixRate ?? 0) > viewModel.lamaCicilan  {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        var isDownPaymentError: Bool {
+            if (viewModel.downPayment ?? 0) > 100{
+                return true
+            } else {
+                return false
+            }
+        }
+        
         
         let downPayment = Double( ((viewModel.hargaProperty ?? 0.0)  * Float(viewModel.downPayment ?? 0.0 ) * 0.01))
         
@@ -24,6 +48,24 @@ struct Page4: View {
         let monthcalculation = Int((Float(viewModel.inputLamaFixRate ?? 0.0)) * 12 )
         
         let rumusLamaFloatingRate = Int(viewModel.lamaCicilan - Float(viewModel.inputLamaFixRate ?? 0.0))
+        
+        var isNextButtonDisabled: Bool {
+            if viewModel.hargaProperty?.isLessThanOrEqualTo(0) == true || viewModel.downPayment?.isLessThanOrEqualTo(0) == true ||
+                (viewModel.downPayment ?? 0) > 100 ||
+                viewModel.hargaProperty == nil ||
+                viewModel.downPayment == nil ||
+                viewModel.inputFixRate == nil ||
+                   (viewModel.inputFixRate ?? 0) > 100 ||
+                   viewModel.inputLamaFixRate == nil ||
+                   (viewModel.inputLamaFixRate ?? 0) > viewModel.lamaCicilan ||
+                   viewModel.inputBungaFloatingRate == 0 && (viewModel.inputLamaFixRate ?? 0) < viewModel.lamaCicilan{
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        
         NavigationStack{
             ScrollView{
                 
@@ -143,6 +185,15 @@ struct Page4: View {
                         }.padding(.leading)
                     }
                     
+                    VStack{
+                        if isDownPaymentError {
+                            Text("*DownPayment melebihi dari 100%")
+                                .transition(.moveAndFade)
+                                .padding(.leading)
+                                .foregroundStyle(Color.red)
+                        }
+                    }.animation(.easeInOut, value: isDownPaymentError)
+                    
                     
                     VStack(alignment: .leading){
                         Text("3.  Pinjaman Pokok : ")
@@ -185,7 +236,7 @@ struct Page4: View {
                     
                     VStack(alignment: .leading){
                         Text("5. Bunga Fixrate ")
-                            .font(.title3.bold())
+                            .font(.headline)
                             .padding()
                             .cornerRadius(16)
                             .frame(width: .infinity)
@@ -203,10 +254,18 @@ struct Page4: View {
                                 .font(.headline)
                         }
                     }
+                    VStack{
+                        if isFixRateError {
+                            Text("*Fixrate melebihi dari 100%")
+                                .transition(.moveAndFade)
+                                .padding(.leading)
+                                .foregroundStyle(Color.red)
+                        }
+                    }.animation(.easeInOut, value: isFixRateError)
                     
                     VStack(alignment: .leading){
-                        Text("6. Lama Fixrate")
-                            .font(.title3.bold())
+                        Text("6. Lama periode fixrate")
+                            .font(.headline)
                             .padding()
                             .cornerRadius(16)
                             .frame(width: .infinity)
@@ -223,13 +282,19 @@ struct Page4: View {
                                 .font(.headline)
                         }.padding(.leading)
                     }
-                    if viewModel.inputLamaFixRate ?? 0.0 > 5 {
-                        Text("Melebihi batas lama fix rate")
-                    }
+                    VStack{
+                        if isLamaFixRateError {
+                            Text("*Lama fixrate melebihi dari lama cicilan")
+                                .transition(.moveAndFade)
+                                .padding(.leading)
+                                .foregroundStyle(Color.red)
+                        }
+                    }.animation(.easeInOut, value: isLamaFixRateError)
+                    
                     
                     VStack(alignment: .leading){
                         Text("7.  Bunga Floatingrate")
-                            .font(.title3.bold())
+                            .font(.headline)
                             .padding()
                             .cornerRadius(16)
                             .frame(width: .infinity)
@@ -246,8 +311,8 @@ struct Page4: View {
                     }
                     
                     VStack(alignment: .leading){
-                        Text("8. Lama bunga floatingrate")
-                            .font(.title3.bold())
+                        Text("8. Lama periode floatingrate")
+                            .font(.headline)
                             .padding()
                             .cornerRadius(16)
                             .frame(width: .infinity)
@@ -280,14 +345,13 @@ struct Page4: View {
                         NavigationLink(destination: ResultsPage()){
                             Text("Calculate")
                                 .padding()
-                                .background(Color("blue"))
+                                .background(isNextButtonDisabled ? Color.blue.opacity(0.5) : Color("blue"))
                                 .colorScheme(.dark)
                                 .cornerRadius(30)
                                 .font(.headline.bold())
                                 .foregroundColor(.primary)
                                 .frame(maxWidth: .infinity, alignment: .center)
-                            
-                        }
+                        }.disabled(isNextButtonDisabled)
                     }
                     
                     Spacer()

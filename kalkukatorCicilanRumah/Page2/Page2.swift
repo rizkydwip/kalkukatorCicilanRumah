@@ -20,8 +20,49 @@ struct Page2: View {
     var body: some View {
         
         let monthcalculation = Int((Float(viewModel.inputLamaFixRate ?? 0.0)) * 12 )
+        
+        
         let rumusLamaFloatingRate = Int(viewModel.lamaCicilan - Float(viewModel.inputLamaFixRate ?? 0.0))
+        
+        
         @State var lamaFloatingRate = rumusLamaFloatingRate
+        
+        var isFixRateError: Bool {
+            if (viewModel.inputFixRate ?? 0) > 100  {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        var isLamaFixRateError: Bool {
+            if (viewModel.inputLamaFixRate ?? 0) > viewModel.lamaCicilan  {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        
+        var isNextButtonDisabled: Bool {
+            if viewModel.inputFixRate == nil ||
+                (viewModel.inputFixRate ?? 0) > 100 ||
+                viewModel.inputLamaFixRate == nil ||
+                (viewModel.inputLamaFixRate ?? 0) > viewModel.lamaCicilan ||
+                viewModel.inputBungaFloatingRate == 0 && (viewModel.inputLamaFixRate ?? 0) < viewModel.lamaCicilan{
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        var isFloatingRateDisabled: Bool {
+            if (viewModel.inputLamaFixRate ?? 0) >= viewModel.lamaCicilan{
+                return true
+            } else {
+                return false
+            }
+        }
         
         NavigationStack{
             ScrollView{
@@ -91,18 +132,18 @@ struct Page2: View {
                                 .font(.headline)
                                 .padding()
                                 .cornerRadius(16)
-    
-                                Text(String(format:"%.0f Tahun", viewModel.lamaCicilan))
-                                    .font(.title2.bold())
-                                    .padding(.leading)
-                           
+                            
+                            Text(String(format:"%.0f Tahun", viewModel.lamaCicilan))
+                                .font(.title2.bold())
+                                .padding(.leading)
+                            
                             
                             HStack{
                                 Slider(
                                     value: $viewModel.lamaCicilan,
-                                    in: 0...30,
+                                    in: 5...30,
                                     step: 5,
-                                    minimumValueLabel: Text("0"),
+                                    minimumValueLabel: Text("5"),
                                     maximumValueLabel: Text("30"),
                                     label: {
                                         Text("Title")
@@ -132,12 +173,21 @@ struct Page2: View {
                                     Label("Graph", systemImage: "questionmark.circle")
                                         .labelStyle(.iconOnly)
                                         .imageScale(.large)
-    //                                    .rotationEffect(.degrees(showDetail ? 90 : 0))
+                                    //                                    .rotationEffect(.degrees(showDetail ? 90 : 0))
                                         .foregroundColor(showDetailFixRate ?  Color("blue") : Color.primary) // atau pakai .foregroundColor
                                         .scaleEffect(showDetailFixRate ? 1 : 1)
                                         .padding()
                                 }
                             }
+                            
+                            VStack{
+                                if isFixRateError {
+                                    Text("*Fixrate melebihi dari 100%")
+                                        .transition(.moveAndFade)
+                                        .padding(.leading)
+                                        .foregroundStyle(Color.red)
+                                }
+                            }.animation(.easeInOut, value: isFixRateError)
                             
                             if showDetailFixRate {
                                 Text("Fixed rate berarti suku bunga yang kamu bayar tidak berubah selama periode tertentu, atau bahkan selama masa pinjaman.")
@@ -159,20 +209,23 @@ struct Page2: View {
                         }
                         
                         
-                        
-                        
-                        
-                        
-                        
-                        
-                        
                         VStack(alignment: .leading){
                             
                             Text("6.  Berapa lama fix rate yang kamu ingin hitung?")
                                 .font(.headline)
                                 .padding()
                                 .cornerRadius(16)
-                  
+                            
+                            VStack{
+                                if isLamaFixRateError {
+                                    Text("* Lama fixrate melebihi lama cicilan")
+                                        .transition(.moveAndFade)
+                                        .padding(.leading)
+                                        .foregroundStyle(Color.red)
+                                }
+                            }.animation(.easeInOut, value: isLamaFixRateError)
+                          
+                            
                             HStack{
                                 TextField("0", value: $viewModel.inputLamaFixRate, formatter: NumberFormatter())
                                     .font(.headline)
@@ -187,6 +240,8 @@ struct Page2: View {
                             }
                             .padding(.leading)
                         }
+                        
+                      
                         
                         
                         
@@ -229,7 +284,7 @@ struct Page2: View {
                                     Label("Graph", systemImage: "questionmark.circle")
                                         .labelStyle(.iconOnly)
                                         .imageScale(.large)
-    //                                    .rotationEffect(.degrees(showDetail ? 90 : 0))
+                                    //                                    .rotationEffect(.degrees(showDetail ? 90 : 0))
                                         .foregroundColor(showDetailFloatingRate ?  Color("blue") : Color.primary) // atau pakai .foregroundColor
                                         .scaleEffect(showDetailFloatingRate ? 1 : 1)
                                         .padding()
@@ -247,7 +302,8 @@ struct Page2: View {
                             
                             
                             HStack(){
-                                TextField("0.000", value: $viewModel.inputBungaFloatingRate, format: .number) .keyboardType(.decimalPad)
+                                TextField("0.000", value: $viewModel.inputBungaFloatingRate, format: .number)
+                                    .keyboardType(.decimalPad)
                                     .font(.headline)
                                     .padding()
                                     .overlay {
@@ -255,39 +311,36 @@ struct Page2: View {
                                             .stroke(Color("blueAI"), lineWidth: 1)
                                     }
                                 Text("%")
-                            }      .padding(.leading)
+                            }.padding(.leading)
+                                .opacity( isFloatingRateDisabled ?  0.5 : 1)
+                                .disabled(isFloatingRateDisabled)
                         }
                         
                         Spacer()
                         Spacer()
                         
-                        if viewModel.inputLamaFixRate ?? 0.0 > 5 {
-                            Text("Melebihi batas lama fix rate")
-                        }else{
-                            HStack{
-                                NavigationLink(destination: Page1()){
-                                    Text("Back")
-                                        .padding()
-                                        .colorScheme(.dark)
-                                        .cornerRadius(16)
-                                        .font(.headline.bold())
-                                        .frame(maxWidth: .infinity, alignment: .center)
-                                    
-                                }
-                                NavigationLink(destination: Page4()){
-                                    Text("Next")
-                                        .padding()
-                                        .background(Color("blue"))
-                                        .colorScheme(.dark)
-                                        .cornerRadius(30)
-                                        .font(.headline.bold())
-                                        .foregroundColor(.primary)
-                                        .frame(maxWidth: .infinity, alignment: .center)
-                                    
-                                }
+                        HStack{
+                            NavigationLink(destination: Page1()){
+                                Text("Back")
+                                    .padding()
+                                    .colorScheme(.dark)
+                                    .cornerRadius(16)
+                                    .font(.headline.bold())
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                
                             }
+                            NavigationLink(destination: Page4()){
+                                Text("Next")
+                                    .padding()
+                                    .background(isNextButtonDisabled ? Color.blue.opacity(0.5) : Color("blue"))
+                                    .colorScheme(.dark)
+                                    .cornerRadius(30)
+                                    .font(.headline.bold())
+                                    .foregroundColor(.primary)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                
+                            }.disabled(isNextButtonDisabled)
                         }
-                        
                     }
                 }
                 .onAppear{

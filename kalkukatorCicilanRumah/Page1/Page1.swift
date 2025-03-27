@@ -20,8 +20,8 @@ class ViewModel: ObservableObject {
     
      @Published var hargaProperty: Float?
      @Published var downPayment: Float?
-     @Published var lamaCicilan : Float = 0
-     @Published var inputFixRate: Float?
+     @Published var lamaCicilan : Float = 5
+     @Published var inputFixRate: Float? 
      @Published var inputLamaFixRate: Float?
      @Published var inputBungaFloatingRate: Float = 0
      @Published var progressNumber1: CGFloat = 0
@@ -69,15 +69,33 @@ struct ProgressBar: View {
 struct Page1: View {
     @EnvironmentObject var viewModel : ViewModel
     @State private var showDetail = false
+    @State private var showError = false
     @State var lamaCicilanFloatingRate: [Double] = []
     @State private var isValid = true
     @State var progress: CGFloat = 0.0
     
+    var isNextButtonDisabled: Bool {
+        if viewModel.hargaProperty?.isLessThanOrEqualTo(0) == true || viewModel.downPayment?.isLessThanOrEqualTo(0) == true ||
+            (viewModel.downPayment ?? 0) > 100 ||
+            viewModel.hargaProperty == nil ||
+            viewModel.downPayment == nil{
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    var isDownPaymentError: Bool {
+        if (viewModel.downPayment ?? 0) > 100{
+            return true
+        } else {
+            return false
+        }
+    }
     
     
     func totalPinjamanPokok(hargaProperty: Float, downPayment:Float) -> Int{
         Int (hargaProperty - ((downPayment/100) * hargaProperty))
-
     }
 
     var body: some View {
@@ -176,12 +194,25 @@ struct Page1: View {
                                     .padding()
                             }
                         }
-                        if showDetail {
-                            Text("Down Payment artinya adalah uang muka. Ini adalah pembayaran awal yang dibayarkan di muka sebelum cicilan dilakukan.")
-                                .transition(.moveAndFade)
-                                .font(.caption.italic())
-                                .padding(.leading)
-                        }
+                    
+                            if showDetail {
+                                
+                                Text("Down Payment artinya adalah uang muka. Ini adalah pembayaran awal yang dibayarkan di muka sebelum cicilan dilakukan.")
+                                    .transition(.moveAndFade)
+                                    .font(.caption.italic())
+                                    .padding(.leading)
+                            }
+                        
+                        
+                        VStack{
+                            if isDownPaymentError {
+                                Text("*DownPayment melebihi dari 100%")
+                                    .transition(.moveAndFade)
+                                    .padding(.leading)
+                                    .foregroundStyle(Color.red)
+                            }
+                        }.animation(.easeInOut, value: isDownPaymentError)
+                        
                         
                         HStack{
                             TextField("0.000", value: $viewModel.downPayment, formatter: NumberFormatter())
@@ -197,9 +228,6 @@ struct Page1: View {
                     }
                     
                     
-                    if viewModel.downPayment ?? 0.0 >= 50 {
-                        Text("melebihi batas downpayment")
-                    } else {
                         VStack(alignment: .leading, spacing: 10){
                             Text("3. Dari data yang telah kamu isi maka pinjaman pokok mu akan sebesar ")
                                 .font(.headline)
@@ -228,17 +256,17 @@ struct Page1: View {
                                 NavigationLink(destination: Page2()){
                                     Text("Next")
                                         .padding()
-                                        .background(Color("blue"))
+                                        .background(isNextButtonDisabled ? Color.blue.opacity(0.5) : Color("blue"))
                                         .colorScheme(.dark)
                                         .cornerRadius(30)
                                         .font(.headline.bold())
                                         .foregroundColor(.primary)
                                         .frame(maxWidth: .infinity, alignment: .center)
                                     
-                                }
+                                }.disabled(isNextButtonDisabled)
                             }
                         }
-                    }
+                    
                     Spacer()
                 }
             }
