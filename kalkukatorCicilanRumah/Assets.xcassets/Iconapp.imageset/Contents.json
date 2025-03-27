@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "Iconapp-2.png",
+      "filename" : "Iconapp.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Iconapp-2 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Iconapp-2 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
